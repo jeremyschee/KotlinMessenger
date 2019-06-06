@@ -1,9 +1,8 @@
 package android.example.kotlinmessenger
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat.startActivity
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +28,8 @@ class   LatestMessagesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.menu_new_message -> {
-
+                val intent = Intent(this,NewMessageActivity::class.java)
+                startActivity(intent)
             }
             R.id.menu_sign_out -> {
                 FirebaseAuth.getInstance().signOut()
