@@ -1,5 +1,6 @@
-package android.example.kotlinmessenger
+package android.example.kotlinmessenger.registerlogin
 
+import android.example.kotlinmessenger.R
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log

@@ -1,7 +1,10 @@
-package android.example.kotlinmessenger
+package android.example.kotlinmessenger.registerlogin
 
 import android.app.Activity
 import android.content.Intent
+import android.example.kotlinmessenger.R
+import android.example.kotlinmessenger.messages.LatestMessagesActivity
+import android.example.kotlinmessenger.models.User
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -24,7 +27,7 @@ class RegisterActivity : AppCompatActivity() {
             performRegister()
         }
         already_have_account_text_view.setOnClickListener {
-            val intent = Intent(this,LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
         selectphoto_button_register.setOnClickListener {
@@ -99,13 +102,17 @@ class RegisterActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
-        val user = User(uid,username_edittext_register.text.toString(),profileImageUrl)
+        val user = User(
+            uid,
+            username_edittext_register.text.toString(),
+            profileImageUrl
+        )
 
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d("RegisterActivity","Finally we saved the user to database")
 
-                val intent = Intent(this,LatestMessagesActivity::class.java)
+                val intent = Intent(this, LatestMessagesActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
@@ -115,6 +122,3 @@ class RegisterActivity : AppCompatActivity() {
     }
 }
 
-class User(val uid:String, val username:String, val profileImageUrl:String){
-    constructor():this("","","")
-}

@@ -1,6 +1,8 @@
-package android.example.kotlinmessenger
+package android.example.kotlinmessenger.messages
 
 import android.content.Intent
+import android.example.kotlinmessenger.R
+import android.example.kotlinmessenger.registerlogin.RegisterActivity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -28,7 +30,7 @@ class   LatestMessagesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.menu_new_message -> {
-                val intent = Intent(this,NewMessageActivity::class.java)
+                val intent = Intent(this, NewMessageActivity::class.java)
                 startActivity(intent)
             }
             R.id.menu_sign_out -> {

@@ -1,5 +1,8 @@
-package android.example.kotlinmessenger
+package android.example.kotlinmessenger.messages
 
+import android.content.Intent
+import android.example.kotlinmessenger.R
+import android.example.kotlinmessenger.models.User
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -22,14 +25,17 @@ class NewMessageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Select User"
 
-//        val adapter = GroupAdapter<ViewHolder>()
-//
-//        adapter.add(UserItem())
-//
+//        val adapter = GroupAdapter<ViewHolder>()//
+//        adapter.add(UserItem())//
 //        recyclerview_newmessage.adapter = adapter
 
         fetchUsers()
     }
+
+    companion object{
+        val USER_KEY = "USER_KEY"
+    }
+
     private fun fetchUsers(){
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -38,7 +44,19 @@ class NewMessageActivity : AppCompatActivity() {
                 p0.children.forEach {
                     Log.d("NewMessage",it.toString())
                     val user = it.getValue(User::class.java)
-                    if (user != null){adapter.add(UserItem(user))}
+                    if (user != null){
+                        adapter.add(UserItem(user))
+                    }
+                }
+                adapter.setOnItemClickListener{ item, view->
+                    val userItem = item as UserItem
+                    val intent = Intent(view.context,ChatLogActivity::class.java)
+//                    intent.putExtra(USER_KEY,userItem.user.username)
+                    intent.putExtra(USER_KEY,userItem.user)
+                    startActivity(intent)
+
+                    finish()
+
                 }
                 recyclerview_newmessage.adapter = adapter
             }
