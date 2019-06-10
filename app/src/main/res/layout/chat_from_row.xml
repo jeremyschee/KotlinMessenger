@@ -19,7 +19,7 @@
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin varius iaculis accumsan. Nulla sodales egestas nunc, vitae rhoncus ante tempor a. Nam rutrum metus ut hendrerit fermentum."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/textview_to_row"
             android:background="@drawable/rounded_edittext_register_login"
             android:padding="16dp"
             android:maxWidth="240dp"
