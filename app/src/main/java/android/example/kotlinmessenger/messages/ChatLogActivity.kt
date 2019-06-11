@@ -64,12 +64,12 @@ class ChatLogActivity : AppCompatActivity() {
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                         val currentUser = LatestMessagesActivity.currentUser
-                        adapter.add(ChatFromItem(chatMessage.text,currentUser!!))
+                        adapter.add(ChatToItem(chatMessage.text,currentUser!!))
                     } else {
-                        adapter.add(ChatToItem(chatMessage.text,toUser!!))
+                        adapter.add(ChatFromItem(chatMessage.text,toUser!!))
                     }
                 }
-
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount -1)
             }
 
             override fun onCancelled(p0: DatabaseError) {
