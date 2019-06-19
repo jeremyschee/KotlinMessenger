@@ -54,7 +54,7 @@ class ChatLogActivity : AppCompatActivity() {
         val toId = toUser?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
 
-        ref.addChildEventListener(object: ChildEventListener {
+        ref.addChildEventListener(object : ChildEventListener {
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
@@ -64,12 +64,12 @@ class ChatLogActivity : AppCompatActivity() {
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                         val currentUser = LatestMessagesActivity.currentUser
-                        adapter.add(ChatToItem(chatMessage.text,currentUser!!))
+                        adapter.add(ChatToItem(chatMessage.text, currentUser!!))
                     } else {
-                        adapter.add(ChatFromItem(chatMessage.text,toUser!!))
+                        adapter.add(ChatFromItem(chatMessage.text, toUser!!))
                     }
                 }
-                recyclerview_chat_log.scrollToPosition(adapter.itemCount -1)
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -137,7 +137,7 @@ class ChatLogActivity : AppCompatActivity() {
 //    }
 }
 
-class ChatFromItem(val text: String,val user: User): Item<ViewHolder>() {
+class ChatFromItem(val text: String, val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.textview_from_row.text = text
 
@@ -151,7 +151,7 @@ class ChatFromItem(val text: String,val user: User): Item<ViewHolder>() {
     }
 }
 
-class ChatToItem(val text: String,val user: User): Item<ViewHolder>() {
+class ChatToItem(val text: String, val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.textview_to_row.text = text
 

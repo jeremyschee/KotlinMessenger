@@ -18,9 +18,9 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_latest_messages.*
 
-class   LatestMessagesActivity : AppCompatActivity() {
+class LatestMessagesActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         var currentUser: User? = null
         val TAG = "LatestMessages"
     }
@@ -30,15 +30,15 @@ class   LatestMessagesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_latest_messages)
 
         recyclerview_latest_messages.adapter = adapter
-        recyclerview_latest_messages.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+        recyclerview_latest_messages.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-        adapter.setOnItemClickListener{item,view->
-            Log.d(TAG,"Message clicked")
-            val intent = Intent(this,ChatLogActivity::class.java)
+        adapter.setOnItemClickListener { item, view ->
+            Log.d(TAG, "Message clicked")
+            val intent = Intent(this, ChatLogActivity::class.java)
 
             val row = item as LatestMessageRow
 
-            intent.putExtra(NewMessageActivity.USER_KEY,row.chatPartnerUser)
+            intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
             startActivity(intent)
         }
 
@@ -50,54 +50,60 @@ class   LatestMessagesActivity : AppCompatActivity() {
         verifyUserIsLoggedIn()
     }
 
-    private val latestMessagesMap = HashMap<String,ChatMessage>()
+    private val latestMessagesMap = HashMap<String, ChatMessage>()
 
-    fun refreshRecyclerViewMessages(){
+    fun refreshRecyclerViewMessages() {
         adapter.clear()
         latestMessagesMap.values.forEach {
             adapter.add(LatestMessageRow(it))
         }
     }
 
-    private fun listenForLatestMessages(){
+    private fun listenForLatestMessages() {
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
-        ref.addChildEventListener(object: ChildEventListener{
+        ref.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
+
             override fun onChildRemoved(p0: DataSnapshot) {
 
             }
+
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                val chatMessage = p0.getValue(ChatMessage::class.java)?:return
+                val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
                 latestMessagesMap[p0.key!!] = chatMessage
                 refreshRecyclerViewMessages()
             }
+
             override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-                val chatMessage = p0.getValue(ChatMessage::class.java)?:return
+                val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
                 latestMessagesMap[p0.key!!] = chatMessage
                 refreshRecyclerViewMessages()
             }
+
             override fun onChildMoved(p0: DataSnapshot, p1: String?) {
 
             }
         })
     }
+
     val adapter = GroupAdapter<ViewHolder>()
 
 //    private fun setupDummyRows(){
 //        adapter.add(LatestMessageRow())
 //    }
 
-    private fun fetchCurrentUser(){
+    private fun fetchCurrentUser() {
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 currentUser = p0.getValue(User::class.java)
-                Log.d("LatestMessages","Current user: ${currentUser?.username}")
+                Log.d("LatestMessages", "Current user: ${currentUser?.username}")
             }
+
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -114,7 +120,7 @@ class   LatestMessagesActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.menu_new_message -> {
                 val intent = Intent(this, NewMessageActivity::class.java)
                 startActivity(intent)
@@ -130,7 +136,7 @@ class   LatestMessagesActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.nav_menu,menu)
+        menuInflater.inflate(R.menu.nav_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 }

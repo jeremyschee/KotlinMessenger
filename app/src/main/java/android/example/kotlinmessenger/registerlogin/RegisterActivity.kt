@@ -33,20 +33,20 @@ class RegisterActivity : AppCompatActivity() {
         selectphoto_button_register.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            startActivityForResult(intent,0)
+            startActivityForResult(intent, 0)
         }
     }
 
-    var selectedPhotoUri:Uri? = null
+    var selectedPhotoUri: Uri? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null){
-            Log.d("RegisterActivity","Photo was selected")
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            Log.d("RegisterActivity", "Photo was selected")
 
             selectedPhotoUri = data.data
 
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,selectedPhotoUri)
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
 
             selectphoto_imageview_register.setImageBitmap(bitmap)
 
@@ -57,26 +57,27 @@ class RegisterActivity : AppCompatActivity() {
 
         }
     }
-    private fun performRegister(){
+
+    private fun performRegister() {
         val email = email_edittext_register.text.toString()
         val password = password_edittext_register.text.toString()
 
-        if (email.isEmpty()||password.isEmpty()) {
-            Toast.makeText(this,"Please enter email and password",Toast.LENGTH_SHORT).show()
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
             return
         }
-        Log.d("RegisterActivity","Email is $email")
-        Log.d("RegisterActivity","Password is $password")
+        Log.d("RegisterActivity", "Email is $email")
+        Log.d("RegisterActivity", "Password is $password")
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener
-                Log.d("RegisterActivity","Successfully register user ${it.result.user.uid}")
+                Log.d("RegisterActivity", "Successfully register user ${it.result.user.uid}")
                 uploadImageToFirebaseStorage()
             }
             .addOnFailureListener {
-                Log.d("RegisterActivity","Failed to register user: ${it.message}")
-                Toast.makeText(this,"Failed to register user: ${it.message}",Toast.LENGTH_SHORT).show()
+                Log.d("RegisterActivity", "Failed to register user: ${it.message}")
+                Toast.makeText(this, "Failed to register user: ${it.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -98,7 +99,8 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d("RegisterActivity", "Failed to upload photo: ${it.message}")
             }
     }
-    private fun saveUserToFirebaseDatabase(profileImageUrl: String){
+
+    private fun saveUserToFirebaseDatabase(profileImageUrl: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
@@ -110,7 +112,7 @@ class RegisterActivity : AppCompatActivity() {
 
         ref.setValue(user)
             .addOnSuccessListener {
-                Log.d("RegisterActivity","Finally we saved the user to database")
+                Log.d("RegisterActivity", "Finally we saved the user to database")
 
                 val intent = Intent(this, LatestMessagesActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
